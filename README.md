@@ -95,7 +95,8 @@ ssu lr
    - adaptation-common                ... https://releases.jolla.com/releases/4.6.0.13/jolla-hw/adaptation-common/aarch64/
    - adaptation-community-tama-system ... https://repo.sailfishos.org/obs/nemo:/testing:/hw:/sony:/tama:/aosp10:/system/aosp10/
    - adaptation0                      ... https://repo.sailfishos.org/obs/nemo:/testing:/hw:/sony:/tama:/aosp10:/4.6.0.13/sailfishos_4.6.0.13_aarch64/
-Most important is to make sure that adaptation0 points to https://repo.sailfishos.org host
+
+It is important to make sure that adaptation0 points to https://repo.sailfishos.org host
 and not Jolla's store. If your repos don't have it, fix it by
 installing the community adaptation package as root. Note that you can use this RPM even if you are on 4.5 or later releases:
 ```bash
