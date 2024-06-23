@@ -633,12 +633,16 @@ issues. So, to enter recovery or boot:
 
 Starting with 3.4.0.24, images are built using [create-images](scripts/create-images.sh)
 script. It requires device-specific `.hadk.pre-DEVNAME` and generic `.hadk.post` environment
-initialization files. To generate images for all devices, run `create-images.sh` after
-adjusting RELEASE variable in the script. Images will be generated under
-`$ANDROID_ROOT/releases/$RELEASE`.
+initialization files.
+
+To generate images for all devices, run in HOST:
+```bash
+scripts/create-images.sh --version testing --release 4.6.0.13
+```
+Images can be generated for different releases and versions (testing or devel). Images will be
+generated under `$ANDROID_ROOT/releases/$RELEASE`.
 
 Images can be uploaded using [release-image-uploader](scripts/release-image-uploader.sh)
 script. You would need to have [github-release](https://github.com/github-release/github-release)
 installed and security token enabled (see instructions at github-release, security token needs access
-to public_repo). Also, adjust
-repository and user name in the script.
+to public_repo). Also, adjust repository and user name in the script.
