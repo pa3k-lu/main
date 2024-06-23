@@ -49,9 +49,8 @@ To switch from AOSP9-based Sailfish port, see separate
 
 ## Over-the-Air updates (OTA)
 
-OTA updates are supported. They were tested without public releases.
-
-Currently supported OTA updates are to the following releases:
+OTA updates are supported. Currently supported OTA updates are to the
+following releases:
 
 - 4.6.0.13
 - 4.5.0.24
@@ -66,87 +65,8 @@ Currently supported OTA updates are to the following releases:
 - 4.2.0.21
 - [4.1.0.24 Alpha to Beta](ota-from-alpha.md) See separate instructions for this update
 
-OTA updates are supported via command line, as described below.
-- Backup of Sailfish OS user files to a sdcard or to another device is strongly encouraged before updating Sailfish OS.
-- Updates are tested by making updates between consecutive versions of Sailfish. Before skipping versions,
-  check at [TJC](https://together.jolla.com) whether it is recommended. In addition, read the
-  [release notes](https://github.com/sailfishos-sony-tama/main/releases) for the versions that you plan to skip.
-- Enable ability to change to root in Settings/Developer tools:
-  - Enable 'Developer tools'
-  - Set the password
-  - Allow 'Remote connection' if you wish to update via ssh
-- Open shell with normal nemo user preferrably via ssh
-- Updating Sailfish OS via commandline:
-```bash
-# Start with refresh of current SFOS repo
-devel-su zypper ref 
-# Update all packages for current SFOS release
-devel-su zypper up
-# Replace DEVCODE below with your device code (see above). For XZ2 single sim - h8216
-devel-su zypper in patterns-sailfish-device-configuration-DEVCODE
-
-# Replace with the release you are updating to
-ssu release 4.6.0.13
-
-ssu lr
-```
-
-- At this stage, check that you have the port repos, as shown below (example for 4.6.0.13):
-   - adaptation-common                ... https://releases.jolla.com/releases/4.6.0.13/jolla-hw/adaptation-common/aarch64/
-   - adaptation-community-tama-system ... https://repo.sailfishos.org/obs/nemo:/testing:/hw:/sony:/tama:/aosp10:/system/aosp10/
-   - adaptation0                      ... https://repo.sailfishos.org/obs/nemo:/testing:/hw:/sony:/tama:/aosp10:/4.6.0.13/sailfishos_4.6.0.13_aarch64/
-
-It is important to make sure that adaptation0 points to https://repo.sailfishos.org host
-and not Jolla's store. If your repos don't have it, fix it by
-installing the community adaptation package as root. Note that you can use this RPM even if you are on 4.5 or later releases:
-```bash
-curl -O https://repo.sailfishos.org/obs/nemo:/testing:/hw:/sony:/tama:/aosp10:/4.6.0.13/sailfishos_4.6.0.13_aarch64/aarch64/community-adaptation-testing-1.3.0-1.2.1.jolla.aarch64.rpm
-```
-and install it:
-
-```
-zypper in community-adaptation-testing-1.3.0-1.2.1.jolla.aarch64.rpm
-```
-While zypper may complain that the package is not signed, install it
-anyway. After that, `ssu lr` should list the missing repository:
-```
-Enabled repositories (global): 
- - adaptation-common                ... https://releases.jolla.com/releases/4.6.0.13/jolla-hw/adaptation-common/aarch64/
- - adaptation-community-tama-system ... https://repo.sailfishos.org/obs/nemo:/testing:/hw:/sony:/tama:/aosp10:/system/aosp10/
- - adaptation0                      ... https://repo.sailfishos.org/obs/nemo:/testing:/hw:/sony:/tama:/aosp10:/4.6.0.13/sailfishos_4.6.0.13_aarch64/
- - apps                             ... https://releases.jolla.com/jolla-apps/4.6.0.13/aarch64/
- - hotfixes                         ... https://releases.jolla.com/releases/4.6.0.13/hotfixes/aarch64/
- - jolla                            ... https://releases.jolla.com/releases/4.6.0.13/jolla/aarch64/
-
-Enabled repositories (user): 
- - sailfishos-chum  ... https://repo.sailfishos.org/obs/sailfishos:/chum/4.6.0.13_aarch64/
- - store            ... https://store-repository.jolla.com/h8216/aarch64/?version=4.6.0.13
-
-```
-If community-adaptation-testing package with this version information is not available, find a newer one at https://repo.sailfishos.org/obs/nemo:/testing:/hw:/sony:/tama:/aosp10:/4.6.0.13/sailfishos_4.6.0.13_aarch64/aarch64/ .
-
-- Now continue with the update:
-
-```
-# You may have many of OpenRepos enabled. It's recommended to disable them, even
-# though version --dup will do its best-effort to isolate repositories:
-ssu lr | grep openrepos
-
-devel-su zypper clean -a
-devel-su zypper ref -f
-
-devel-su version --dup
-# if above fails, try again
-# devel-su version --dup
-
-# Check before reboot that all packages were installed
-# Replace DEVCODE below with your device code (see above). For XZ2 single sim - h8216
-devel-su zypper in patterns-sailfish-device-configuration-DEVCODE
-
-# just in case
-sync
-```
-- Reboot. Note that on the first boot, it will reboot again automatically if the kernel is updated.
+OTA instructions are given in separate [document](ota.md). Please read
+instructions fully before the update.
 
 ## Current state
 
