@@ -26,6 +26,40 @@ Note that OTA updates are supported via command line.
 
 - Open shell with normal defaultuser user preferrably via ssh
 
+- Check that you have all expected repositories enabled using `ssu lr`. Example below when run from 4.6.0.13:
+```
+ssu lr
+Enabled repositories (global):
+ - adaptation-common                ... https://releases.jolla.com/releases/4.6.0.13/jolla-hw/adaptation-common/aarch64/
+ - adaptation-community-tama-system ... https://repo.sailfishos.org/obs/nemo:/testing:/hw:/sony:/tama:/aosp10:/system/aosp10/
+ - adaptation0                      ... https://repo.sailfishos.org/obs/nemo:/testing:/hw:/sony:/tama:/aosp10:/4.6.0.13/sailfishos_4.6.0.13_aarch64/
+ - apps                             ... https://releases.jolla.com/jolla-apps/4.6.0.13/aarch64/
+ - hotfixes                         ... https://releases.jolla.com/releases/4.6.0.13/hotfixes/aarch64/
+ - jolla                            ... https://releases.jolla.com/releases/4.6.0.13/jolla/aarch64/
+
+Enabled repositories (user):
+ - sailfishos-chum  ... https://repo.sailfishos.org/obs/sailfishos:/chum/4.6.0.13_aarch64/
+ - store            ... https://store-repository.jolla.com/h8216/aarch64/?version=4.6.0.13
+```
+Out of these repositories, make sure you have all repositories in `global` section and `store` in `user` section.
+Also, check that they point to correct hosts, as shown above. With SFOS versions, URL would change, but changes
+in hosts are not expected. In particular, `adaptation0` should point to `repo.sailfishos.org/...`. If pointing to Jolla's store or missing, download `community-adaptation-testing` package for your SFOS version from OBS. For example, for 4.5.0.24, from https://repo.sailfishos.org/obs/nemo:/testing:/hw:/sony:/tama:/aosp10:/4.5.0.24/sailfishos_4.5.0.24_aarch64/aarch64/ and install it using command line and zypper as in:
+```bash
+curl -O https://repo.sailfishos.org/obs/nemo:/testing:/hw:/sony:/tama:/aosp10:/4.5.0.24/sailfishos_4.5.0.24_aarch64/aarch64/community-adaptation-testing-1.2.0-1.1.1.jolla.aarch64.rpm
+devel-su zypper in community-adaptation-testing-1.2.0-1.1.1.jolla.aarch64.rpm
+```
+While zypper may complain that the package is not signed, install it
+anyway. After that, `ssu lr` should list the missing repository.
+
+- After confirming that all repositories are there, check if you are up to date:
+```bash
+devel-su zypper ref
+devel-su zypper up
+```
+If kernel or similar packages were installed, reboot before proceeding.
+
+## Update repositories
+
 - Point repositories to the new release
 ```bash
 # Start with refresh of current SFOS repo
@@ -47,37 +81,12 @@ ssu lr
    - adaptation-community-tama-system ... https://repo.sailfishos.org/obs/nemo:/testing:/hw:/sony:/tama:/aosp10:/system/aosp10/
    - adaptation0                      ... https://repo.sailfishos.org/obs/nemo:/testing:/hw:/sony:/tama:/aosp10:/4.6.0.13/sailfishos_4.6.0.13_aarch64/
 ```
-It is important to make sure that adaptation0 points to https://repo.sailfishos.org host
+As in the preparation stage above, it is important to make sure that adaptation0 points to https://repo.sailfishos.org host
 and not Jolla's store. If your repos are missing adaptation0 or they point to Jolla's server, fix it by
-installing the community adaptation package as root. Note that you can use this RPM even if you are on 4.5 or later releases:
-```bash
-curl -O https://repo.sailfishos.org/obs/nemo:/testing:/hw:/sony:/tama:/aosp10:/4.6.0.13/sailfishos_4.6.0.13_aarch64/aarch64/community-adaptation-testing-1.3.0-1.2.1.jolla.aarch64.rpm
-```
-and install it:
-
-```
-zypper in community-adaptation-testing-1.3.0-1.2.1.jolla.aarch64.rpm
-```
-While zypper may complain that the package is not signed, install it
-anyway. After that, `ssu lr` should list the missing repository:
-```
-Enabled repositories (global):
- - adaptation-common                ... https://releases.jolla.com/releases/4.6.0.13/jolla-hw/adaptation-common/aarch64/
- - adaptation-community-tama-system ... https://repo.sailfishos.org/obs/nemo:/testing:/hw:/sony:/tama:/aosp10:/system/aosp10/
- - adaptation0                      ... https://repo.sailfishos.org/obs/nemo:/testing:/hw:/sony:/tama:/aosp10:/4.6.0.13/sailfishos_4.6.0.13_aarch64/
- - apps                             ... https://releases.jolla.com/jolla-apps/4.6.0.13/aarch64/
- - hotfixes                         ... https://releases.jolla.com/releases/4.6.0.13/hotfixes/aarch64/
- - jolla                            ... https://releases.jolla.com/releases/4.6.0.13/jolla/aarch64/
-
-Enabled repositories (user):
- - sailfishos-chum  ... https://repo.sailfishos.org/obs/sailfishos:/chum/4.6.0.13_aarch64/
- - store            ... https://store-repository.jolla.com/h8216/aarch64/?version=4.6.0.13
-
-```
-If community-adaptation-testing package with this version information is not available, find a newer one at https://repo.sailfishos.org/obs/nemo:/testing:/hw:/sony:/tama:/aosp10:/4.6.0.13/sailfishos_4.6.0.13_aarch64/aarch64/ .
+installing the community adaptation package as root. Make sure you will get all repositories configured.
 
 - You may have many of OpenRepos enabled. It's recommended to disable
- them, even though version --dup will do its best-effort to isolate
+ them, even though `version --dup` will do its best-effort to isolate
  repositories:
 ```
 ssu lr | grep openrepos
